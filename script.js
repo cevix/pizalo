@@ -7,14 +7,14 @@ document.addEventListener("DOMContentLoaded", () => {
   
     tabButtons.forEach((button) => {
       button.addEventListener("click", function () {
-        // Remove active class from all buttons and contents
+        // I remove the active class from the button and the content
         tabButtons.forEach((btn) => btn.classList.remove("active"))
         tabContents.forEach((content) => content.classList.remove("active"))
   
-        // Add active class to clicked button
+        // I add active class to clicked button
         this.classList.add("active")
   
-        // Show content
+        // I add the active class to display the content 
         const tabId = this.getAttribute("data-tab")
         document.getElementById(tabId).classList.add("active")
       })

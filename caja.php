@@ -2,10 +2,10 @@
 <html lang="es">
 <head>
 
-    <!--      Introducir  BigDecimal en el proyecto para evitar errores al calcular el cambio de floats         -->
+    <!--      Introducir  BigDecimal en el proyecto       -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caja</title>
+    <title>Telepizza - Caja</title>
     <link rel="stylesheet" href="styleCajero.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,7 +31,7 @@
                 <div class="section-card">
                     <h2 class="section-title">Datos de entrega</h2>
                     <form id="direccionForm" class="direccion-form">
-                        <div class="form-row">
+                        <div id="selectForm" class="form-row">
                             <div class="form-group">
                                 <label for="tipoEntrega">Tipo de entrega</label>
                                 <select id="tipoEntrega" class="form-control">
@@ -49,11 +49,11 @@
                             <div class="form-row">
                                 <div class="form-group form-group-lg">
                                     <label for="calle">Calle</label>
-                                    <input type="text" id="calle" class="form-control" placeholder="Nombre de la calle" required>
+                                    <input type="text" id="calle" class="form-control" placeholder="Nombre de la calle" >
                                 </div>
                                 <div class="form-group form-group-sm">
                                     <label for="numero">Número</label>
-                                    <input type="text" id="numero" class="form-control" placeholder="Nº" required>
+                                    <input type="text" id="numero" class="form-control" placeholder="Nº" >
                                 </div>
                             </div>
 
@@ -78,7 +78,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div id="clientName" class="form-group">
                             <label for="nombre">Nombre del cliente</label>
                             <input type="text" id="nombre" class="form-control" placeholder="Nombre completo" required>
                         </div>
@@ -279,21 +279,14 @@
                             <label class="payment-option">
                                 <input type="radio" name="paymentMethod" value="datafono" checked>
                                 <span class="payment-label">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <rect x="2" y="5" width="20" height="14" rx="2"></rect>
-                                        <line x1="2" y1="10" x2="22" y2="10"></line>
-                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-credit-card-icon lucide-credit-card"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
                                     Datáfono
                                 </span>
                             </label>
                             <label class="payment-option">
                                 <input type="radio" name="paymentMethod" value="efectivo">
                                 <span class="payment-label">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <rect x="2" y="6" width="20" height="12" rx="2"></rect>
-                                        <circle cx="12" cy="12" r="2"></circle>
-                                        <path d="M6 12h.01M18 12h.01"></path>
-                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-banknote-icon lucide-banknote"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
                                     Efectivo
                                 </span>
                             </label>
@@ -313,7 +306,8 @@
                         </div>
                     </div>
                     
-                    <button id="finalizarPedido" class="btn-finalizar">
+                    <button id="finalizarPedido" class="btn-finalizar" type="submit
+                    ">
                         Finalizar pedido
                     </button>
                 </div>
@@ -336,21 +330,10 @@
                 </div>
                 
                 <div class="confirm-actions">
-                    <button id="printOrderBtn" class="btn-action">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 6 2 18 2 18 9"></polyline>
-                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                            <rect x="6" y="14" width="12" height="8"></rect>
-                        </svg>
-                        Imprimir ticket
-                    </button>
-                    <button id="newOrderBtn" class="btn-action">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="12" y1="5" x2="12" y2="19"></line>
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                        </svg>
-                        Nuevo pedido
-                    </button>
+                    
+                    <a href="index.php" id="newOrderBtn" class="btn-action">
+                        Volver a Pedidos
+                    </a>
                 </div>
             </div>
         </div>

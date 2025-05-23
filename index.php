@@ -11,15 +11,15 @@
 	<header class="header">
     <div class="container header-container">
       <div class="container-logo">
-        <h1 class="logo">Telepizza</h1>
+        <h1 class="logo">Pizzalo</h1>
       </div>
       
-        <div class="header-buttons">
-          <a href="#openModalTime" class="btn btn-secondary" href="open">Tiempos</a>
-          <a href="#openModalFile" class="btn btn-secondary">Fichar</a>
-          <a href="caja.php" class="btn btn-secondary">Caja</a>
-          <a href="#openModalAddWorker" class="btn btn-white">Añadir Trabajador</a>
-        </div>
+      <div class="header-buttons">
+        <a href="#openModalTime" class="btn btn-secondary">Tiempos</a>
+        <a href="#openModalFile" class="btn btn-secondary">Fichar</a>
+        <a href="caja.php" class="btn btn-secondary">Caja</a>
+        <a href="#openModalAddWorker" class="btn btn-white">Añadir Trabajador</a>
+      </div>
     </div>
   </header>
 
@@ -41,19 +41,19 @@
 	            <div class="cards">
                 <!--        lista de pedidos     -->
 	                <div class="card-content">
-                    <div class="card-rigth">
-                      <div class="order-header">
-                        <span class="order-number">505</span>
-                        <div class="order-times">
-                          <span class="time">20:58</span>
-                          <span class="time time-red">20:47</span>
-                        </div>
+                    <div class="card-left">
+                      <span class="order-number">505</span>
+                      <div class="order-address">
+                        <p>Calle de Leon felipe, 4 Portal B, piso 5A</p>
                       </div>
-                      <div class="order-address">Calle de Leon felipe, 4 Portal B, piso 5A</div>
                     </div>
                     
 
-                    <div class="card-left">
+                    <div class="card-rigth">
+                      <div class="order-times">
+                        <span class="time">20:58</span>
+                        <span class="time time-red">20:47</span>
+                      </div> 
                       <a href="ticket.php"><img width="28" height="28" src="https://img.icons8.com/material-sharp/28/receipt.png" alt="receipt"/></a>
                     </div>
 	                </div>
@@ -103,6 +103,8 @@
             <p class="delivery-lastname">Borja Sandoval</p>
             <p class="delivery-hours">19:00-23:30</p>
           </div>
+
+          
         </div>
       </div>
     </div>
@@ -113,31 +115,33 @@
 	
 
 
-	<div id="openModalTime" class="modalDialog">
-    <div class="modal-container">
-        <!-- Botón de cerrar -->
-        <a href="#close" id="closeModalBtn" class="close-modal-btn">X</a>
-        
-        <!-- Contenido del modal -->
-        <div class="modal-content">
-          <h2 class="modal-title">Añadir Trabajador</h2>
-          
-          <form action="ticket.php" id="ficharForm" class="fichar-form">
-              <div class="form-group">
-                <label for="name">Domicilio</label>
-                <input type="number" id="name" name="name" placeholder="Introduce tu nombre" required>
-              </div>
+	
 
-              <div class="form-group">
-                <label for="lastName">Recoger</label>
-                <input type="number" id="lastName" name="lastName" placeholder="Introduce tus apellidos" required>
-              </div>
-              
-              <button type="submit" class="submit-btn">Enviar</button>
-          </form>
+  <div id="openModalTime" class="modal-overlay">
+        <div class="modal-container">
+            <!-- Botón de cerrar -->
+            <a href="#close" id="closeModalBtn" class="close-modal-btn">X</a>
+            
+            <!-- Contenido del modal -->
+            <div class="modal-content">
+                <h2 class="modal-title">Fichar turno</h2>
+                
+                <form action="ticket.php" id="ficharForm" class="fichar-form">
+                    <div class="form-group">
+                        <label for="name">Domicilio</label>
+                        <input type="number" id="name" name="name" placeholder="Introduce Los minutos" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lastName">Recoger</label>
+                <input type="number" id="lastName" name="lastName" placeholder="Introduce los minutos" required>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Enviar</button>
+                </form>
+            </div>
         </div>
     </div>
-	</div>
 
 
 	<div id="openModalAddWorker" class="modalDialog">
@@ -150,31 +154,44 @@
         <div class="modal-content">
           <h2 class="modal-title">Añadir Trabajador</h2>
           
-          <form action="ticket.php" id="ficharForm" class="fichar-form">
-              <div class="form-group">
-                <label for="name">Nombre</label>
-                <input type="text" id="name" name="name" placeholder="Introduce tu nombre" required>
+          <form action="ticket.php" method="get" id="ficharForm" class="fichar-form">
+              <div class="form-group row">
+                <div class="item-form">
+                  <label for="name">Nombre</label>
+                  <input type="text" id="name" name="name" placeholder="Introduce tu nombre" required>
+                </div>
+                 <div class="item-form">
+                  <label for="lastName">Apellidos</label>
+                  <input type="text" id="lastName" name="lastName" placeholder="Introduce tus apellidos" required>
+                </div>
+                
               </div>
 
-              <div class="form-group">
-                <label for="lastName">Apellidos</label>
-                <input type="text" id="lastName" name="lastName" placeholder="Introduce tus apellidos" required>
+              <div class="form-group row">
+                <div class="item-form">
+                  <label for="email">Correo electronico</label>
+                  <input type="email" id="email" name="email" placeholder="Introduce tu correo" required>
+                </div>
+
+                <div class="item-form">
+                  <label for="telefono">telefono</label>
+                  <input type="number" id="telefono" name="telefono" placeholder="Introduce tu numero de telefono" required>
+                </div>
               </div>
 
-              <div class="form-group">
-                <label for="email">Correo electronico</label>
-                <input type="email" id="email" name="email" placeholder="Introduce tu DNI" required>
-              </div>
-
-              <div class="form-group">
-                <label for="dni">DNI</label>
-                <input type="text" id="dni" name="dni" placeholder="Introduce tu DNI" required>
-              </div>
+              <div class="form-group row">
+                <div class="item-form">
+                  <label for="dni">DNI</label>
+                  <input type="text" id="dni" name="dni" placeholder="Introduce tu DNI" required>
+                </div>
               
-              <div class="form-group">
-                <label for="password">Contraseña</label>
-                <input type="password" id="password" name="password" placeholder="Introduce tu contraseña" required>
+                <div class="item-form">
+                  <label for="password">Contraseña</label>
+                  <input type="password" id="password" name="password" placeholder="Introduce tu contraseña" required>
+                </div>
               </div>
+
+              
               
               <button type="submit" class="submit-btn">Enviar</button>
           </form>
@@ -331,7 +348,7 @@ a{
     display: none;
   }
   
-  .tab-content.active {
+  .active {
     display: block;
   }
   
@@ -378,15 +395,26 @@ a{
   .card-content {
     padding: 1rem;
     display: flex;
+    align-items: ;
     justify-content: space-between;
     margin-bottom: 0.4rem;
     background-color: #e0f2fe;
     border-radius: 0.5rem;
   }
+
+  .card-rigth{
+    width: 25%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .card-left{
-  display: flex;
-  align-items: center;
-}
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+  }
   
   
   /* Order Styles */
@@ -413,7 +441,8 @@ a{
   }
   
   .order-address {
-    margin-top: 0.5rem;
+    margin-left: 0.4rem;
+    margin-top: 0.1rem;
     font-size: 0.875rem;
   }
   
@@ -486,7 +515,7 @@ a{
 	pointer-events: auto;
 }
 .modalDialog > div {
-	width: 400px;
+	width: 700px;
 	position: relative;
 	margin: 10% auto;
 	padding: 5px 20px 13px 20px;
@@ -540,7 +569,7 @@ a{
   background-color: white;
   border-radius: 8px;
   width: 90%;
-  max-width: 400px;
+  max-width: 800px;
   position: relative;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transform: scale(0.9);
@@ -581,13 +610,22 @@ a{
 .fichar-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 1px;
+}
+
+.row {
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.item-form{
+  width: 45%;
 }
 
 .form-group label {

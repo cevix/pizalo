@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const printOrderBtn = document.getElementById("printOrderBtn")
     const newOrderBtn = document.getElementById("newOrderBtn")
   
-    // Mostrar/ocultar datos de entrega según tipo
+    // Mostrar/ocultar el cambio 
     if (tipoEntrega) {
       tipoEntrega.addEventListener("change", () => {
         if (tipoEntrega.value === "domicilio") {
@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Eventos de los botones de las cantidades
         document.querySelectorAll(".quantity-btn.decrease").forEach((btn) => {
           btn.addEventListener("click", (e) => {
-            e.stopPropagation()
+            
             const itemElement = btn.closest(".order-item")
             const itemId = itemElement.getAttribute("data-id")
             decreaseQuantity(itemId)
@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
         document.querySelectorAll(".quantity-btn.increase").forEach((btn) => {
           btn.addEventListener("click", (e) => {
-            e.stopPropagation()
+            //e.stopPropagation()
             const itemElement = btn.closest(".order-item")
             const itemId = itemElement.getAttribute("data-id")
             increaseQuantity(itemId)
@@ -227,12 +227,6 @@ document.addEventListener("DOMContentLoaded", () => {
           return
         }
   
-        // Validar formulario
-        const form = document.getElementById("direccionForm")
-        if (!form.checkValidity()) {
-          form.reportValidity()
-          return
-        }
   
         // Validar método de pago
         const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value
@@ -255,42 +249,20 @@ document.addEventListener("DOMContentLoaded", () => {
       })
     }
   
-    // Cerrar modal de confirmación
+    // Cerrar modal
     if (closeConfirmModalBtn) {
       closeConfirmModalBtn.addEventListener("click", () => {
-        confirmModal.classList.remove("active")
-      })
-    }
-  
-    // Cerrar modal haciendo clic fuera
-    if (confirmModal) {
-      confirmModal.addEventListener("click", (e) => {
-        if (e.target === confirmModal) {
-          confirmModal.classList.remove("active")
-        }
-      })
-    }
-  
-    // simular que se imprime el ticket
-    if (printOrderBtn) {
-      printOrderBtn.addEventListener("click", () => {
-        // Simulación de impresión
-        alert("Imprimiendo ticket...")
-      })
-    }
-  
-    // reiniciar todo para relaizar un nuevo pedido
-    if (newOrderBtn) {
-      newOrderBtn.addEventListener("click", () => {
-        // Reiniciar formulario y carrito
         document.getElementById("direccionForm").reset()
         cart = []
         updateCart()
+        document.getElementById("direccionForm").reset()
         confirmModal.classList.remove("active")
+        
       })
     }
   
-    // Inicializar carrito
+  
+    
     updateCart()
   })
   
