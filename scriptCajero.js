@@ -4,11 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const shippingCost = 1.5
   
     // Elementos DOM
-    const tipoEntrega = document.getElementById("tipoEntrega")
-    const datosEntrega = document.getElementById("datosEntrega")
-    const productTabs = document.querySelectorAll(".product-tab")
-    const productContents = document.querySelectorAll(".product-content")
-    const productCards = document.querySelectorAll(".product-card")
+    
+    
     const orderItems = document.getElementById("orderItems")
     const subtotalElement = document.getElementById("subtotal")
     const envioElement = document.getElementById("envio")
@@ -21,10 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const confirmModal = document.getElementById("confirmModal")
     const closeConfirmModalBtn = document.getElementById("closeConfirmModalBtn")
     const orderNumberElement = document.getElementById("orderNumber")
-    const printOrderBtn = document.getElementById("printOrderBtn")
-    const newOrderBtn = document.getElementById("newOrderBtn")
   
-    // Mostrar/ocultar el cambio 
+    // Mostrar o ocultar el cambio 
+
+    const tipoEntrega = document.getElementById("tipoEntrega")
+    const datosEntrega = document.getElementById("datosEntrega")
+
     if (tipoEntrega) {
       tipoEntrega.addEventListener("change", () => {
         if (tipoEntrega.value === "domicilio") {
@@ -39,7 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
       })
     }
   
-    // Cambiar entre pestañas de productos
+    // cambiar de pestaña productos
+
+
+    const productTabs = document.querySelectorAll(".product-tab")
+    const productContents = document.querySelectorAll(".product-content")
+
     productTabs.forEach((tab) => {
       tab.addEventListener("click", () => {
 
@@ -53,10 +57,14 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   
     // Añadir productos al carrito
+
+    const productCards = document.querySelectorAll(".product-card")
+
     productCards.forEach((card) => {
       card.addEventListener("click", () => {
         const productId = card.getAttribute("data-id")
         const productName = card.getAttribute("data-name")
+        //const productInfo = card.getAttribute("data-info")
         const productPrice = Number.parseFloat(card.getAttribute("data-price"))
   
         // Comprobar si el producto ya está en el carrito
@@ -69,6 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
           cart.push({
             id: productId,
             name: productName,
+            //info: productInfo,
             price: productPrice,
             quantity: 1,
             total: productPrice,
@@ -105,6 +114,13 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
               <div class="order-item-total">${item.total.toFixed(2)}€</div>
               <div class="order-item-remove">×</div>
+              
+              <div style="display: none;">
+              <input type="text" id="${item.id}" name="${item.id}" value="${item.name}">
+              <input type="text" id="${item.id}" name="${item.id}" value="${item.price.toFixed(2)}">
+              <input type="text" id="${item.id}" name="${item.id}" value="${item.quantity}">
+              </div>
+
             </div>
           `
         })
@@ -188,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   
-    // Mostrar/ocultar sección de cambio según método de pago
+    // Mostrar o ocultar sección de cambio según método de pago
     paymentMethods.forEach((method) => {
       method.addEventListener("change", () => {
         if (method.value === "efectivo") {
@@ -219,35 +235,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   
     // Finalizar pedido
-    if (finalizarPedidoBtn) {
-      finalizarPedidoBtn.addEventListener("click", () => {
-        // Validar que hay productos en el carrito
-        if (cart.length === 0) {
-          alert("Añade productos al pedido antes de finalizar")
-          return
-        }
-  
-  
-        // Validar método de pago
-        const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value
-        if (paymentMethod === "efectivo") {
-          const importe = Number.parseFloat(importeEfectivo.value) || 0
-          const total = Number.parseFloat(totalElement.textContent)
-  
-          if (importe < total) {
-            alert("El importe en efectivo es insuficiente")
-            return
-          }
-        }
-  
-        // Generar número de pedido (simulado)
-        const orderNumber = Math.floor(Math.random() * 100) + 500
-        orderNumberElement.textContent = orderNumber
-  
-        // Mostrar modal de confirmación
-        confirmModal.classList.add("active")
-      })
-    }
+    
+    
   
     // Cerrar modal
     if (closeConfirmModalBtn) {
@@ -260,6 +249,31 @@ document.addEventListener("DOMContentLoaded", () => {
         
       })
     }
+
+    // Agarramos el formulario
+    const form = document.getElementById('direccionForm');
+
+    form.addEventListener('submit', function(e) {
+        if (cart.length === 0) {
+            alert("Añade productos al pedido antes de finalizar");
+            e.preventDefault();  // Detiene el envío del formulario
+            return;
+        }
+        
+        // verificar si el importe es suficiente
+        const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value
+        if (paymentMethod === "efectivo") {
+          const importe = Number.parseFloat(importeEfectivo.value) || 0
+          const total = Number.parseFloat(totalElement.textContent)
+  
+          if (importe < total) {
+            alert("El importe en efectivo es insuficiente")
+            e.preventDefault();  // Detiene el envío del formulario
+            return;
+          }
+        }
+    });
+
   
   
     

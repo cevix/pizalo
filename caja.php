@@ -24,24 +24,25 @@
 
     <!-- Main Content -->
     <main class="container main-content">
-        <div class="caja-grid">
+        <form id="direccionForm" method="get" action="GuardarUsuario.php" class="direccion-form">
+            <div class="caja-grid">
             <!-- Columna izquierda: Formulario y Productos -->
             <div class="caja-left">
                 <!-- Formulario de dirección -->
                 <div class="section-card">
                     <h2 class="section-title">Datos de entrega</h2>
-                    <form id="direccionForm" class="direccion-form">
+                    
                         <div id="selectForm" class="form-row">
                             <div class="form-group">
                                 <label for="tipoEntrega">Tipo de entrega</label>
-                                <select id="tipoEntrega" class="form-control">
+                                <select id="tipoEntrega" name="tipoEntrega" class="form-control">
                                     <option value="domicilio">Entrega a domicilio</option>
                                     <option value="recoger">Recoger en tienda</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="telefono">Teléfono</label>
-                                <input type="tel" id="telefono" class="form-control" placeholder="Ej: 612345678" required>
+                                <input type="number" id="telefono" name="telefono" class="form-control" placeholder="Ej: 612345678" required>
                             </div>
                         </div>
 
@@ -49,40 +50,40 @@
                             <div class="form-row">
                                 <div class="form-group form-group-lg">
                                     <label for="calle">Calle</label>
-                                    <input type="text" id="calle" class="form-control" placeholder="Nombre de la calle" >
+                                    <input type="text" id="calle" name="calle" class="form-control" placeholder="Nombre de la calle" >
                                 </div>
                                 <div class="form-group form-group-sm">
                                     <label for="numero">Número</label>
-                                    <input type="text" id="numero" class="form-control" placeholder="Nº" >
+                                    <input type="text" id="numero" name="numero" class="form-control" placeholder="Nº" >
                                 </div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="bloque">Bloque/Portal</label>
-                                    <input type="text" id="bloque" class="form-control" placeholder="Bloque/Portal">
+                                    <input type="text" id="bloque" name="bloque" class="form-control" placeholder="Bloque/Portal">
                                 </div>
                                 <div class="form-group">
                                     <label for="piso">Piso</label>
-                                    <input type="text" id="piso" class="form-control" placeholder="Piso">
+                                    <input type="text" id="piso" name="piso" class="form-control" placeholder="Piso">
                                 </div>
                                 <div class="form-group">
                                     <label for="puerta">Puerta</label>
-                                    <input type="text" id="puerta" class="form-control" placeholder="Puerta">
+                                    <input type="text" id="puerta" name="puerta" class="form-control" placeholder="Puerta">
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="referencia">Punto de referencia (opcional)</label>
-                                <input type="text" id="referencia" class="form-control" placeholder="Ej: Frente al parque">
+                                <input type="text" id="referencia" name="referencia" class="form-control" placeholder="Ej: Frente al parque">
                             </div>
                         </div>
 
                         <div id="clientName" class="form-group">
                             <label for="nombre">Nombre del cliente</label>
-                            <input type="text" id="nombre" class="form-control" placeholder="Nombre completo" required>
+                            <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre completo" required>
                         </div>
-                    </form>
+                    
                 </div>
 
                 <!-- Catálogo de productos -->
@@ -90,58 +91,58 @@
                     <h2 class="section-title">Productos</h2>
                     
                     <div class="product-tabs">
-                        <button class="product-tab active" data-tab="pizzas">Pizzas</button>
-                        <button class="product-tab" data-tab="complementos">Complementos</button>
-                        <button class="product-tab" data-tab="bebidas">Bebidas</button>
-                        <button class="product-tab" data-tab="postres">Postres</button>
+                        <div class="product-tab active" data-tab="pizzas">Pizzas</div>
+                        <div class="product-tab" data-tab="complementos">Complementos</div>
+                        <div class="product-tab" data-tab="bebidas">Bebidas</div>
+                        <div class="product-tab" data-tab="postres">Postres</div>
                     </div>
                     
                     <div class="product-content active" id="pizzas">
                         <div class="product-grid">
-                            <div class="product-card" data-id="p1" data-name="Pizza Barbacoa" data-price="12.95">
+                            <div class="product-card" data-id="p1" data-name="Barbacoa" data-price="12.95">
                                 <div class="product-img">🍕</div>
                                 <div class="product-info">
-                                    <h3>Pizza Barbacoa</h3>
+                                    <h3>Barbacoa</h3>
                                     <p>Salsa barbacoa, carne, bacon, cebolla</p>
                                     <div class="product-price">12.95€</div>
                                 </div>
                             </div>
-                            <div class="product-card" data-id="p2" data-name="Pizza Carbonara" data-price="11.95">
+                            <div class="product-card" data-id="p2" data-name="Carbonara" data-price="11.95">
                                 <div class="product-img">🍕</div>
                                 <div class="product-info">
-                                    <h3>Pizza Carbonara</h3>
+                                    <h3>Carbonara</h3>
                                     <p>Nata, bacon, champiñones</p>
                                     <div class="product-price">11.95€</div>
                                 </div>
                             </div>
-                            <div class="product-card" data-id="p3" data-name="Pizza 4 Quesos" data-price="12.50">
+                            <div class="product-card" data-id="p3" data-name="4 Quesos" data-price="12.50">
                                 <div class="product-img">🍕</div>
                                 <div class="product-info">
-                                    <h3>Pizza 4 Quesos</h3>
+                                    <h3>4 Quesos</h3>
                                     <p>Mozzarella, gorgonzola, emmental, parmesano</p>
                                     <div class="product-price">12.50€</div>
                                 </div>
                             </div>
-                            <div class="product-card" data-id="p4" data-name="Pizza Hawaiana" data-price="11.50">
+                            <div class="product-card" data-id="p4" data-name="Hawaiana" data-price="11.50">
                                 <div class="product-img">🍕</div>
                                 <div class="product-info">
-                                    <h3>Pizza Hawaiana</h3>
+                                    <h3>Hawaiana</h3>
                                     <p>Jamón york, piña</p>
                                     <div class="product-price">11.50€</div>
                                 </div>
                             </div>
-                            <div class="product-card" data-id="p5" data-name="Pizza Pepperoni" data-price="11.95">
+                            <div class="product-card" data-id="p5" data-name="Pepperoni" data-price="11.95">
                                 <div class="product-img">🍕</div>
                                 <div class="product-info">
-                                    <h3>Pizza Pepperoni</h3>
+                                    <h3>Pepperoni</h3>
                                     <p>Pepperoni, mozzarella</p>
                                     <div class="product-price">11.95€</div>
                                 </div>
                             </div>
-                            <div class="product-card" data-id="p6" data-name="Pizza Vegetal" data-price="12.50">
+                            <div class="product-card" data-id="p6" data-name="Vegetal" data-price="12.50">
                                 <div class="product-img">🍕</div>
                                 <div class="product-info">
-                                    <h3>Pizza Vegetal</h3>
+                                    <h3>Vegetal</h3>
                                     <p>Pimiento, cebolla, champiñones, aceitunas</p>
                                     <div class="product-price">12.50€</div>
                                 </div>
@@ -306,13 +307,12 @@
                         </div>
                     </div>
                     
-                    <button id="finalizarPedido" class="btn-finalizar" type="submit
-                    ">
-                        Finalizar pedido
-                    </button>
+                    <input id="finalizarPedido" class="btn-finalizar" type="submit" value="Finalizar pedido">
                 </div>
             </div>
+            
         </div>
+        </form>
     </main>
 
     <!-- Modal de confirmación -->
