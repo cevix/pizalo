@@ -99,7 +99,7 @@
         mysqli_query($conexion,"SET NAMES 'UTF8'");
         
         if (mysqli_select_db($conexion,$dbname)) {
-            $consulta="SELECT * FROM `repartidor`";
+            $consulta="SELECT * FROM `repartidores`";
             $resultado=mysqli_query($conexion,$consulta);
 
             while ($repartidor=mysqli_fetch_array($resultado)) {
