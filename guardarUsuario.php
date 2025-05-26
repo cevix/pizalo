@@ -2,14 +2,33 @@
 
 include 'db.php';
 
-$nombre = $_POST['nombre'];
+
+
+$nombre = $_POST['name'];
+$apellidos= $_POST['lastName'];
 $email = $_POST['email'];
+$telefono = $_POST['telefono'];
 $dni = $_POST['dni'];
-$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-$stmt = $pdo-> prepare("INSERT INTO repartidores (nombre, email, dni , password) VALUES (?,?,?,?))")
-$stmt->execute([$nombre,$email,$dni,$password]);
 
-echo "Repartidor registrado";
+$password_hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
+$idUnico = bin2hex(random_bytes(8));
+
+
+$conexion = mysqli_connect($hostname, $username, $password, $dbname);
+
+
+if (!$conexion) {
+    die("Conexión fallida: " . mysqli_connect_error());
+}
+
+$sql = "INSERT INTO repartidores (id,nombre,apellido, email, telefono, dni , password_hash) VALUES ('$idUnico','$nombre','$apellidos','$email','$telefono','$dni' ,'$password_hash')";
+
+$resultado=mysqli_query($conexion, $sql);
+if ($resultado) {
+    echo "Registro insertado correctamente.";
+} else {
+    echo "Error: " . mysqli_error($conexion);
+}
 
 ?>

@@ -79,32 +79,49 @@
         </div>
       </div>
 
-      <!-- Repartidores Tab -->
+      <!-- Repartidores -->
+      
+
+
+
+
+
       <div class="tab-content" id="repartidores">
         <div class="section-header amber">Repartidores</div>
         <div class="repartidores-grid">
-          <div class="delivery-card">
-            <h3 class="delivery-name">Alexander Yamir</h3>
-            <p class="delivery-lastname">Lopez Acevedo</p>
-            <p class="delivery-hours">21:00-1:00</p>
-          </div>
-          <div class="delivery-card">
-            <h3 class="delivery-name">Jose luis</h3>
-            <p class="delivery-lastname">Paniagua Rodriguez</p>
-            <p class="delivery-hours">20:30-23:30</p>
-          </div>
-          <div class="delivery-card">
-            <h3 class="delivery-name">Victor</h3>
-            <p class="delivery-lastname">Conde Sante</p>
-            <p class="delivery-hours">20:00-23:30</p>
-          </div>
-          <div class="delivery-card">
-            <h3 class="delivery-name">Zoilita Irene</h3>
-            <p class="delivery-lastname">Borja Sandoval</p>
-            <p class="delivery-hours">19:00-23:30</p>
-          </div>
+          <?php 
 
-          
+      require('db.php');
+
+      try {
+        //Realizo la conexion
+      $conexion=mysqli_connect($hostname, $username, $password, $dbname);
+        mysqli_query($conexion,"SET NAMES 'UTF8'");
+        
+        if (mysqli_select_db($conexion,$dbname)) {
+            $consulta="SELECT * FROM `repartidor`";
+            $resultado=mysqli_query($conexion,$consulta);
+
+            while ($repartidor=mysqli_fetch_array($resultado)) {
+                //creo cada uno de las targetas de cada repartidor
+                echo "<div class='delivery-card'>
+                        <h3 class='delivery-name'>$repartidor[nombre]</h3>
+                          <p class='delivery-lastname'>$repartidor[apellido]</p>
+            
+                      </div>";
+                
+            }
+            
+        }
+    } catch (mysqli_sql_exception $mse) {
+        echo  "<p>Nº del error: ".$mse->getCode()."</p>";
+        echo "<p>mesaje del error: ".$mse->getMessage()."</p>";
+    }
+
+
+
+
+       ?> 
         </div>
       </div>
     </div>
@@ -124,17 +141,17 @@
             
             <!-- Contenido del modal -->
             <div class="modal-content">
-                <h2 class="modal-title">Fichar turno</h2>
+                <h2 class="modal-title">Insertar Tiempos</h2>
                 
-                <form action="ticket.php" id="ficharForm" class="fichar-form">
+                <form action="guardarTiempos.php" method="post" id="ficharForm" class="fichar-form">
                     <div class="form-group">
-                        <label for="name">Domicilio</label>
-                        <input type="number" id="name" name="name" placeholder="Introduce Los minutos" required>
+                        <label for="delivery">Domicilio</label>
+                        <input type="number" id="delivery" name="delivery" placeholder="Introduce Los minutos" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="lastName">Recoger</label>
-                <input type="number" id="lastName" name="lastName" placeholder="Introduce los minutos" required>
+                        <label for="pickUp">Recoger</label>
+                <input type="number" id="pickUp" name="pickUp" placeholder="Introduce los minutos" required>
                     </div>
                     
                     <button type="submit" class="submit-btn">Enviar</button>
@@ -154,15 +171,15 @@
         <div class="modal-content">
           <h2 class="modal-title">Añadir Trabajador</h2>
           
-          <form action="ticket.php" method="get" id="ficharForm" class="fichar-form">
+          <form action="GuardarUsuario.php" method="post" id="ficharForm" class="fichar-form">
               <div class="form-group row">
                 <div class="item-form">
                   <label for="name">Nombre</label>
-                  <input type="text" id="name" name="name" placeholder="Introduce tu nombre" required>
+                  <input type="text" id="name" name="name" maxlength="100" placeholder="Introduce tu nombre" required>
                 </div>
                  <div class="item-form">
                   <label for="lastName">Apellidos</label>
-                  <input type="text" id="lastName" name="lastName" placeholder="Introduce tus apellidos" required>
+                  <input type="text" id="lastName" name="lastName" maxlength="100" placeholder="Introduce tus apellidos" required>
                 </div>
                 
               </div>
@@ -175,19 +192,19 @@
 
                 <div class="item-form">
                   <label for="telefono">telefono</label>
-                  <input type="number" id="telefono" name="telefono" placeholder="Introduce tu numero de telefono" required>
+                  <input type="number" id="telefono" name="telefono" maxlength="9" placeholder="Introduce tu numero de telefono" required>
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="item-form">
                   <label for="dni">DNI</label>
-                  <input type="text" id="dni" name="dni" placeholder="Introduce tu DNI" required>
+                  <input type="text" id="dni" name="dni" maxlength="9" placeholder="Introduce tu DNI" required>
                 </div>
               
                 <div class="item-form">
                   <label for="password">Contraseña</label>
-                  <input type="password" id="password" name="password" placeholder="Introduce tu contraseña" required>
+                  <input type="password" id="password" name="password" maxlength="8" placeholder="Introduce tu contraseña" required>
                 </div>
               </div>
 
@@ -210,7 +227,7 @@
             <div class="modal-content">
                 <h2 class="modal-title">Fichar turno</h2>
                 
-                <form action="ticket.php" id="ficharForm" class="fichar-form">
+                <form action="ficharTurno.php" method="post" id="ficharForm" class="fichar-form">
                     <div class="form-group">
                         <label for="dni">DNI</label>
                         <input type="text" id="dni" name="dni" placeholder="Introduce tu DNI" required>

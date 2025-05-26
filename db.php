@@ -1,18 +1,18 @@
 
 <?php 
 
-	$host = '';
-	$dbname = '';
-	$user = '';
-	$pass = '';
-
-
-	try{
-		$pdo = new PDO("mysql:host= $host;dbname=$dbname;charset=utf8",$user,$pass)
-	}catch(PDOException $e){
-		die("Error de conexion:" . $e -> getMessage());
-	}
-
+	//DAtos del servisor
+	$hostname = 'localhost';
+	$username = 'root';
+	$password = '';
+	$dbname = 'pizalo';
+/*
+	//DAtos del servisor
+	$hostname = 'mysql.webcindario.com';
+	$username = 'pizalo';
+	$password = 'pizalo';
+	$dbname = 'pizalo';
+*/
 
 
  ?>
