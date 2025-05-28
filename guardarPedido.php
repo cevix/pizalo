@@ -14,6 +14,8 @@ try {
 $timepoEstimado = "";
 $tipoEntrega=$_POST['tipoEntrega'];
 $informacion=$_POST['informacion'];
+$telefono=$_POST['telefono'];
+$cliente=$_POST['cliente'];
 $direccion=$_POST['direccion'];
 $bloque=$_POST['bloque'];
 $numero = $_POST['numero'];
@@ -119,7 +121,7 @@ $horaSalidaObligatoria=date("H:i",$salidaCalculada);
 
 //$conexion = mysqli_connect($hostname, $username, $password, $dbname);
 
-$consulta="INSERT INTO `pedidos`(codigo_pedido, codigoDiario, fecha ,hora_entrega, salida_obligatoria, Estado, direccion, comentarios, precio_total, metodo_Pago, importe_efectivo, cambio) VALUES ('$idPedido','$codigoDiario','$fechaPedido','$horaEntrega','$horaSalidaObligatoria','pendiente','$direccionCompleta','$informacion','$precioTotal','$paymentMethod','$importeEfectivo','$cambio')";
+$consulta="INSERT INTO `pedidos`(codigo_pedido,codigoDiario,tipoPedido,cliente,telefono,fecha,hora_entrega,salida_obligatoria,estado, direccion,comentarios,precio_total,metodo_Pago,importe_efectivo, cambio) VALUES ('$idPedido','$codigoDiario','$tipoEntrega','$cliente','$telefono' ,'$fechaPedido','$horaEntrega','$horaSalidaObligatoria','pendiente','$direccionCompleta','$informacion','$precioTotal','$paymentMethod','$importeEfectivo','$cambio')";
 
 $resultado=mysqli_query($conexion, $consulta);
 if ($resultado) {

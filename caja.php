@@ -80,8 +80,8 @@
                         </div>
 
                         <div id="clientName" class="form-group">
-                            <label for="nombre">Nombre del cliente</label>
-                            <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre completo" required>
+                            <label for="cliente">Nombre del cliente</label>
+                            <input type="cliente" id="cliente" name="cliente" class="form-control" placeholder="Ingrese el nombre del cliente" required>
                         </div>
                     
                 </div>

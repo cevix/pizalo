@@ -7,7 +7,18 @@
 	<title>Pedidos Pendientes</title>
 </head>
 <body>
-	
+	<?php 
+
+  try {
+        require('db.php');
+    } catch (Throwable $t) {
+        echo "<p> ---------------</p>";
+        echo "<p>Mensaje:" . $t->getMessage()."</p>";
+        echo "<p> ---------------</p>";
+        exit();
+    }
+
+  ?>
 	<header class="header">
     <div class="container header-container">
       <div class="container-logo">
@@ -40,27 +51,69 @@
 	            <div class="section-header">Pedidos</div>
 	            <div class="cards">
                 <!--        lista de pedidos     -->
-	                <div class="card-content">
-                    <div class="card-left">
-                      <span class="order-number">505</span>
-                      <div class="order-address">
-                        <p>Calle de Leon felipe, 4 Portal B, piso 5A</p>
+	                
+                  <?php 
+
+                  try {
+
+        //Realizo la conexion
+      $conexion=mysqli_connect($hostname, $username, $password, $dbname);
+
+      $diaActual=date("Y-m-d");
+
+      if (!$conexion) {
+        die("Error de conexión a MySQL: " . mysqli_connect_error());
+        }
+
+      if (!mysqli_select_db($conexion, $dbname)) {
+        die("No se pudo seleccionar la base de datos: " . mysqli_error($conexion));
+        }
+
+        mysqli_query($conexion,"SET NAMES 'UTF8'");
+        
+        if (mysqli_select_db($conexion,$dbname)) {
+            $consulta="SELECT * FROM `pedidos` WHERE fecha = '$diaActual'";
+            $resultado=mysqli_query($conexion,$consulta);
+
+            while ($datosPedido=mysqli_fetch_array($resultado)) {
+                //creo cada uno de las targetas de cada repartidor
+                $id=$datosPedido['id'];
+                $hora_entrega=substr($datosPedido['hora_entrega'], 0, 5);
+                $salida_obligatoria=substr($datosPedido['salida_obligatoria'], 0, 5);
+              echo "<div class='card-content'>
+                    <div class='targetaParteIzquierda'>
+                      <span class='codigoPedido'>$datosPedido[codigoDiario]</span>
+                      <div class='pedidoDireccion'>
+                        <p>$datosPedido[direccion]</p>
                       </div>
                     </div>
                     
 
-                    <div class="card-rigth">
-                      <div class="order-times">
-                        <span class="time">20:58</span>
-                        <span class="time time-red">20:47</span>
+                    <div class='targetaParteDerecha'>
+                      <div class='order-times'>
+                        <span class='time'>$hora_entrega</span>
+                        <span class='time time-red'>$salida_obligatoria</span>
                       </div> 
-                      <a href="ticket.php"><img width="28" height="28" src="https://img.icons8.com/material-sharp/28/receipt.png" alt="receipt"/></a>
+                      <a href='ticket.php?id=$datosPedido[id]'><img width='28' height='28' src='https://img.icons8.com/material-sharp/28/receipt.png' alt='receipt'/></a>
                     </div>
-	                </div>
+                  </div>";
+                
+            }
+            
+        }
+    } catch (mysqli_sql_exception $mse) {
+        echo  "<p>Nº del error: ".$mse->getCode()."</p>";
+        echo "<p>mesaje del error: ".$mse->getMessage()."</p>";
+    }
 
-	                <div class="card-content">
-	                    <div class="order-address">31 Villalobos 129, 2B</div>
-	                </div>
+
+
+
+                  ?>
+
+                  
+
+	             
 	            </div>
 	        </div>
 
@@ -69,10 +122,10 @@
 	            <div class="section-header">En reparto</div>
 	            <div class="cards">
 	                <div class="card-content">
-	                    <div class="order-address">513 Maquinilla 13</div>
+	                    <div class="pedidoDireccion">513 Maquinilla 13</div>
 	                </div>
 	                <div class="card-content">
-	                    <div class="order-address">909 Avenida de Miguel Hernandez, 116</div>
+	                    <div class="pedidoDireccion">909 Avenida de Miguel Hernandez, 116</div>
 	                </div>
 	            </div>
 	        </div>
@@ -91,14 +144,7 @@
         <div class="repartidores-grid">
           <?php 
 
-      try {
-        require('db.php');
-    } catch (Throwable $t) {
-        echo "<p> ---------------</p>";
-        echo "<p>Mensaje:" . $t->getMessage()."</p>";
-        echo "<p> ---------------</p>";
-        exit();
-    }
+      
 
       try {
 
@@ -436,14 +482,14 @@ a{
     border-radius: 0.5rem;
   }
 
-  .card-rigth{
+  .targetaParteDerecha{
     width: 25%;
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
 
-  .card-left{
+  .targetaParteIzquierda{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -458,7 +504,7 @@ a{
     align-items: center;
   }
   
-  .order-number {
+  .codigoPedido {
     font-size: 1.25rem;
     font-weight: 700;
   }
@@ -474,7 +520,7 @@ a{
     color: #dc2626;
   }
   
-  .order-address {
+  .pedidoDireccion {
     margin-left: 0.4rem;
     margin-top: 0.1rem;
     font-size: 0.875rem;
