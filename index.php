@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="">	
+		
 	<title>Pedidos Pendientes</title>
 </head>
 <body>
@@ -26,10 +26,11 @@
       </div>
       
       <div class="header-buttons">
-        <a href="#openModalTime" class="btn btn-secondary">Tiempos</a>
-        <a href="#openModalFile" class="btn btn-secondary">Fichar</a>
-        <a href="caja.php" class="btn btn-secondary">Caja</a>
-        <a href="#openModalAddWorker" class="btn btn-white">Añadir Trabajador</a>
+        <a href="#openModalTime" class="btn estiloModales">Tiempos</a>
+        <a href="#openModalFile" class="btn estiloModales">Fichar</a>
+        <a href="#openModalAddWorker" class="btn estiloModales">Añadir Trabajador</a>
+        <a href="caja.php" class="btn estiloRedireccion">Caja</a>
+        
       </div>
     </div>
   </header>
@@ -54,7 +55,7 @@
 	                
                   <?php 
 
-                  try {
+  try {
 
         //Realizo la conexion
       $conexion=mysqli_connect($hostname, $username, $password, $dbname);
@@ -72,7 +73,7 @@
         mysqli_query($conexion,"SET NAMES 'UTF8'");
         
         if (mysqli_select_db($conexion,$dbname)) {
-            $consulta="SELECT * FROM `pedidos` WHERE fecha = '$diaActual'";
+            $consulta="SELECT * FROM `pedidos` WHERE fecha = '$diaActual' AND tipoPedido ='domicilio' AND estado='pendiente'";
             $resultado=mysqli_query($conexion,$consulta);
 
             while ($datosPedido=mysqli_fetch_array($resultado)) {
@@ -120,13 +121,50 @@
 	        <!-- En Reparto          -->
 	        <div class="column">
 	            <div class="section-header">En reparto</div>
-	            <div class="cards">
-	                <div class="card-content">
-	                    <div class="pedidoDireccion">513 Maquinilla 13</div>
-	                </div>
-	                <div class="card-content">
-	                    <div class="pedidoDireccion">909 Avenida de Miguel Hernandez, 116</div>
-	                </div>
+                <div class="cards">
+
+<?php 
+
+  try {
+
+        //Realizo la conexion
+      $conexion=mysqli_connect($hostname, $username, $password, $dbname);
+
+      $diaActual=date("Y-m-d");
+
+      if (!$conexion) {
+        die("Error de conexión a MySQL: " . mysqli_connect_error());
+        }
+
+      if (!mysqli_select_db($conexion, $dbname)) {
+        die("No se pudo seleccionar la base de datos: " . mysqli_error($conexion));
+        }
+
+        mysqli_query($conexion,"SET NAMES 'UTF8'");
+        
+        if (mysqli_select_db($conexion,$dbname)) {
+            $consulta="SELECT * FROM `pedidos` WHERE fecha = '$diaActual' AND tipoPedido ='domicilio' AND estado='en camino'";
+            $resultado=mysqli_query($conexion,$consulta);
+
+            while ($datosPedido=mysqli_fetch_array($resultado)) {
+                //creo cada uno de las targetas de cada repartidor
+                $id=$datosPedido['id'];
+                $hora_entrega=substr($datosPedido['hora_entrega'], 0, 5);
+                $salida_obligatoria=substr($datosPedido['salida_obligatoria'], 0, 5);
+              
+              echo "<div class='card-content'>
+                      <div class='pedidoDireccion'>$datosPedido[codigoDiario] $datosPedido[direccion]</div>
+                  </div>";
+                
+            }
+            
+        }
+    } catch (mysqli_sql_exception $mse) {
+        echo  "<p>Nº del error: ".$mse->getCode()."</p>";
+        echo "<p>mesaje del error: ".$mse->getMessage()."</p>";
+    }
+                  ?>
+
 	            </div>
 	        </div>
         </div>
@@ -306,9 +344,41 @@
             </div>
         </div>
     </div>
+
+    <?php 
+
+       
+    if (isset($_GET['mensaje'])) {
+       $mensaje=$_GET['mensaje'];
+       echo "<div id='confirmModal' class='modalInfo show'>
+        <div class='contenedorInfo'>
+            <button id='cerrarInfo' class='botonCerrarInfo'>X</button>
+            <div class='contenedorMensaje'>
+                <div class='confirm-content'>
+                    <p>$mensaje</p>       
+                </div>      
+            </div>
+        </div>
+    </div>";
+    }
+
+
+
+    ?>
 	
 
 </body>
+
+<script type="text/javascript">
+  
+  const cerrarInfo = document.getElementById("cerrarInfo")
+  if (cerrarInfo) {
+      cerrarInfo.addEventListener("click", () => {
+        confirmModal.classList.remove("show")
+        
+      })
+    }
+</script>
 
 <style type="text/css">
 	*{
@@ -369,20 +439,20 @@ body {
     transition: all 0.2s ease;
   }
   
-  .btn-secondary {
+  .estiloModales {
     background-color: rgba(255, 255, 255, 0.2);
     color: white;
   }
-  .btn-secondary:hover {
+  .estiloModales:hover {
     background-color: rgba(255, 255, 255, 0.3);
   }
   
-  .btn-white {
+  .estiloRedireccion {
     background-color: white;
     color: #dc2626;
   }
   
-  .btn-white:hover {
+  .estiloRedireccion:hover {
     background-color: #f3f4f6;
   }
 
@@ -806,5 +876,63 @@ input[type="submit"]:hover {
 	display: flex;
 	justify-content: center;
 }
+
+
+  .modalInfo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+  }
+  
+  .modalInfo.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .contenedorInfo {
+    background-color: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transform: scale(0.9);
+    transition: transform 0.3s;
+  }
+  
+  .modalInfo.show .contenedorInfo {
+    transform: scale(1);
+  }
+  
+  .botonCerrarInfo {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #333;
+  }
+  
+  .contenedorMensaje {
+    padding: 30px;
+  }
+  
+  
+  
+  
+
 </style>
 </html>

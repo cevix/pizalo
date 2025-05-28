@@ -185,7 +185,21 @@ try {
         $pdf->Cell(22,5,iconv("UTF-8", "ISO-8859-1","Cambio Efectivo Euros"),0,0,'C');
         $pdf->Cell(32,5,iconv("UTF-8", "ISO-8859-1",$cambio),0,0,'C');
         
+    }else{
+        $pdf->Ln(2);
+        $pdf->Cell(18,5,iconv("UTF-8", "ISO-8859-1",""),0,0,'C');
+        $pdf->Cell(22,5,iconv("UTF-8", "ISO-8859-1","Total Euros"),0,0,'C');
+        $pdf->Cell(32,5,iconv("UTF-8", "ISO-8859-1",$precio_total),0,0,'C');
+
+        $pdf->Ln(5);
+
+        $pdf->Cell(18,5,iconv("UTF-8", "ISO-8859-1",""),0,0,'C');
+        $pdf->Cell(22,5,iconv("UTF-8", "ISO-8859-1","A cobrar Efectivo Euros:"),0,0,'C');
+        $pdf->Cell(32,5,iconv("UTF-8", "ISO-8859-1",$precio_total),0,0,'C');
+        
     }
+
+
     
 
     $pdf->Ln(7);

@@ -26,9 +26,14 @@ $consulta = "INSERT INTO repartidores (id,nombre,apellido, email, telefono, dni 
 
 $resultado=mysqli_query($conexion, $consulta);
 if ($resultado) {
-    echo "Registro insertado correctamente.";
+    
+    $mensaje="Se ha guardado correctamente el usuario";
+    $mensajeUrlencode=urlencode($mensaje);
+    header("Location:index.php?mensaje=$mensajeUrlencode");
 } else {
-    echo "Error: " . mysqli_error($conexion);
+    $mensaje="Error:no se guardado el usuario";
+    $mensajeUrlencode=urlencode($mensaje);
+    header("Location:index.php?mensaje=$mensajeUrlencode");
 }
 
 ?>

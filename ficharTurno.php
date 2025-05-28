@@ -11,7 +11,6 @@ try {
     exit();
 }
 
-phpinfo();
 
 
 
@@ -21,49 +20,66 @@ try {
     mysqli_query($conexion, "SET NAMES 'UTF8'");
 
     if (mysqli_select_db($conexion, $dbname)) {
-        // Obtener datos del formulario (usuario y contraseña)
+        
         $dniInput = $_POST['dni'];
         $passwordInput = $_POST['password'];
         ;
-        // Verificar si el usuario existe
+        
         $consulta = "SELECT id, password_hash FROM repartidores WHERE dni='$dniInput'";
         $resultado = mysqli_query($conexion, $consulta);
 
         if ($fila = mysqli_fetch_assoc($resultado)) {
-            // Verificar la contraseña
+            
             if (password_verify($passwordInput, $fila['password_hash'])) {
                 $repartidor_id = $fila['id'];
 
-                // Verificar si hay turno abierto
+                // verifico si hay un turno abierto
                 $consultaTurno = "SELECT id FROM turnos WHERE repartidor_id='$repartidor_id' AND fin IS NULL";
                 $resultadoTurno = mysqli_query($conexion, $consultaTurno);
 
                 if ($turno = mysqli_fetch_assoc($resultadoTurno)) {
-                    // Hay turno abierto, lo cerramos
+                      // Hay turno abierto
                     $idTurno = $turno['id'];
                     $actualizar = "UPDATE turnos SET fin=NOW() WHERE id='$idTurno'";
                     if (mysqli_query($conexion, $actualizar)) {
-                        echo "<p>Turno finalizado correctamente para el repartidor ID: $repartidor_id</p>";
+                        $mensaje="Turno iniciado correctamente,adios";
+                        $mensajeUrlencode=urlencode($mensaje);
+                        header("Location:index.php?mensaje=$mensajeUrlencode");
+
                     } else {
-                        echo "<p>Error al finalizar el turno.</p>";
+                        $mensaje="Error al finalizar el turno.";
+                        $mensajeUrlencode=urlencode($mensaje);
+                        header("Location:index.php?mensaje=$mensajeUrlencode");
                     }
                 } else {
-                    // No hay turno abierto, iniciamos uno
+                     // No hay turno abierto
                     $insertar = "INSERT INTO turnos (repartidor_id, inicio) VALUES ('$repartidor_id', NOW())";
                     if (mysqli_query($conexion, $insertar)) {
-                        echo "<p>Turno iniciado correctamente para el repartidor ID: $repartidor_id</p>";
+                        $mensaje="Turno iniciado correctamente,bienvenido";
+                        $mensajeUrlencode=urlencode($mensaje);
+                        header("Location:index.php?mensaje=$mensajeUrlencode");
                     } else {
-                        echo "<p>Error al iniciar el turno.</p>";
+                        $mensaje="Error al iniciar el turno";
+                        $mensajeUrlencode=urlencode($mensaje);
+                        header("Location:index.php?mensaje=$mensajeUrlencode");
                     }
                 }
             } else {
-                echo "<p>Contraseña incorrecta.</p>";
+                $mensaje="Contraseña incorrecta";
+                $mensajeUrlencode=urlencode($mensaje);
+                header("Location:index.php?mensaje=$mensajeUrlencode");
+
             }
         } else {
-            echo "<p>Usuario no encontrado.</p>";
+            $mensaje="Usuario no encontrado";
+            $mensajeUrlencode=urlencode($mensaje);
+            header("Location:index.php?mensaje=$mensajeUrlencode");
         }
     } else {
-        echo "<p>No se pudo seleccionar la base de datos.</p>";
+        
+        $mensaje="No se pudo seleccionar la base de datos";
+            $mensajeUrlencode=urlencode($mensaje);
+            header("Location:index.php?mensaje=$mensajeUrlencode");
     }
 }catch (Exception $e) {
     echo "<p>Error: " . $e->getMessage() . "</p>";

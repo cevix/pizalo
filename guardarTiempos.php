@@ -30,13 +30,20 @@ try {
 
         // Ejecutar la consulta
         if (mysqli_query($conexion, $consulta)) {
-            echo "Datos actualizados correctamente.<br>";
+            $mensaje="Tiempo actualizado correctamente";
+            $mensajeUrlencode=urlencode($mensaje);
+            header("Location:index.php?mensaje=$mensajeUrlencode");
         } else {
-            echo "Error al actualizar los datos: " . mysqli_error($conexion) . "<br>";
+            $mensaje="Tiempo actualizado correctamente";
+            $mensajeUrlencode=urlencode($mensaje);
+            header("Location:index.php?mensaje=$mensajeUrlencode");
         }
 
     } else {
         echo "No se pudo seleccionar la base de datos.";
+        $mensaje="Ha habido un problema con la base de datos";
+        $mensajeUrlencode=urlencode($mensaje);
+        header("Location:index.php?mensaje=$mensajeUrlencode");
     }
 
 } catch (Exception $e) {
