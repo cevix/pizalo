@@ -54,7 +54,7 @@ try {
                 
                 
                 
-                if ($tipoEntrega = "domicilio") {
+                if ($tipoEntrega == "domicilio") {
                 	$tiempoEstimado=$fila["TDomicilio"];
                 } else {
                 	$tiempoEstimado=$fila["TRecoger"];
@@ -150,6 +150,7 @@ foreach ($productosPedido as $idProducto => $producto) {
 
 }
 
+echo "$tipoEntrega";
 header("Location:caja.php?codigo=$codigoDiario");
 
 

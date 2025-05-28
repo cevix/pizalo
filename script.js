@@ -22,4 +22,14 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
 
+//cerrar modales de mensajes
+const cerrarInfo = document.getElementById("cerrarInfo")
+  if (cerrarInfo) {
+      cerrarInfo.addEventListener("click", () => {
+        confirmModal.classList.remove("show")
+        
+      })
+    }
+
+
   

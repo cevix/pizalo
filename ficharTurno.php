@@ -42,7 +42,7 @@ try {
                     $idTurno = $turno['id'];
                     $actualizar = "UPDATE turnos SET fin=NOW() WHERE id='$idTurno'";
                     if (mysqli_query($conexion, $actualizar)) {
-                        $mensaje="Turno iniciado correctamente,adios";
+                        $mensaje="Turno finalizado correctamente,adios";
                         $mensajeUrlencode=urlencode($mensaje);
                         header("Location:index.php?mensaje=$mensajeUrlencode");
 
