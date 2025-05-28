@@ -11,6 +11,8 @@ try {
     exit();
 }
 
+phpinfo();
+
 
 
 try {

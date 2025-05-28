@@ -24,7 +24,7 @@
 
     <!-- Main Content -->
     <main class="container main-content">
-        <form id="direccionForm" method="get" action="GuardarUsuario.php" class="direccion-form">
+        <form id="direccionForm" method="post" action="guardarPedido.php" class="direccion-form">
             <div class="caja-grid">
             <!-- Columna izquierda: Formulario y Productos -->
             <div class="caja-left">
@@ -49,8 +49,8 @@
                         <div id="datosEntrega">
                             <div class="form-row">
                                 <div class="form-group form-group-lg">
-                                    <label for="calle">Calle</label>
-                                    <input type="text" id="calle" name="calle" class="form-control" placeholder="Nombre de la calle" >
+                                    <label for="direccion">Dirección</label>
+                                    <input type="text" id="direccion" name="direccion" class="form-control" placeholder="Introduce av/dirreccion" >
                                 </div>
                                 <div class="form-group form-group-sm">
                                     <label for="numero">Número</label>
@@ -74,8 +74,8 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="referencia">Punto de referencia (opcional)</label>
-                                <input type="text" id="referencia" name="referencia" class="form-control" placeholder="Ej: Frente al parque">
+                                <label for="Informacion">Informacion del pedido (opcional)</label>
+                                <input type="text" id="informacion" name="informacion" class="form-control" placeholder="Ej: Frente al parque">
                             </div>
                         </div>
 
@@ -271,6 +271,9 @@
                         <div class="total-row total-final">
                             <span>TOTAL:</span>
                             <span id="total">1.50€</span>
+                            <div style="display: none;">
+                                <input type="text" id="precioTotal" name="precioTotal">
+                            </div>
                         </div>
                     </div>
                     
@@ -297,11 +300,11 @@
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="importeEfectivo">Paga con</label>
-                                    <input type="number" id="importeEfectivo" class="form-control" placeholder="0.00" min="0" step="0.01">
+                                    <input type="number" id="importeEfectivo" name="importeEfectivo" class="form-control" placeholder="0.00" min="0" step="0.01">
                                 </div>
                                 <div class="form-group">
                                     <label for="cambio">Cambio</label>
-                                    <input type="text" id="cambio" class="form-control" placeholder="0.00" readonly>
+                                    <input type="text" id="cambio" name="cambio" class="form-control" placeholder="0.00" readonly>
                                 </div>
                             </div>
                         </div>
@@ -316,29 +319,323 @@
     </main>
 
     <!-- Modal de confirmación -->
-    <div id="confirmModal" class="modal-overlay">
-        <div class="modal-container">
-            <button id="closeConfirmModalBtn" class="close-modal-btn">X</button>
+    
+    <?php 
+    if (isset($_GET['codigo'])) {
+       $codigo=$_GET['codigo'];
+       echo "<div id='confirmModal' class='modal-overlay active'>
+        <div class='modal-container'>
+            <button id='closeConfirmModalBtn' class='close-modal-btn'>X</button>
             
-            <div class="modal-content">
-                <h2 class="modal-title">Pedido completado</h2>
+            <div class='modal-content'>
+                <h2 class='modal-title'>Pedido completado</h2>
                 
-                <div class="confirm-content">
-                    <div class="confirm-icon">✓</div>
+                <div class='confirm-content'>
+                    <div class='confirm-icon'>✓</div>
                     <p>El pedido se ha registrado correctamente</p>
-                    <p>Número de pedido: <strong id="orderNumber">506</strong></p>
+                    <p>Número de pedido: <strong id='orderNumber'>$codigo</strong></p>
                 </div>
                 
-                <div class="confirm-actions">
+                <div class='confirm-actions'>
                     
-                    <a href="index.php" id="newOrderBtn" class="btn-action">
+                    <a href='index.php' id='newOrderBtn' class='btn-action'>
                         Volver a Pedidos
                     </a>
                 </div>
             </div>
         </div>
-    </div>
+    </div>";
+    }
 
-    <script src="scriptCajero.js"></script>
+
+
+    ?>
+
+    
+
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", () => {
+    // Variables para el carrito
+    let cart = []
+    const shippingCost = 1.5
+  
+    // Elementos DOM
+    
+    const totalOrder = document.getElementById("precioTotal")
+    const orderItems = document.getElementById("orderItems")
+    const subtotalElement = document.getElementById("subtotal")
+    const envioElement = document.getElementById("envio")
+    const totalElement = document.getElementById("total")
+    const paymentMethods = document.querySelectorAll('input[name="paymentMethod"]')
+    const cambioContainer = document.getElementById("cambioContainer")
+    const importeEfectivo = document.getElementById("importeEfectivo")
+    const cambioElement = document.getElementById("cambio")
+    const finalizarPedidoBtn = document.getElementById("finalizarPedido")
+    const confirmModal = document.getElementById("confirmModal")
+    const closeConfirmModalBtn = document.getElementById("closeConfirmModalBtn")
+    const orderNumberElement = document.getElementById("orderNumber")
+  
+    // Mostrar o ocultar el cambio 
+
+    const tipoEntrega = document.getElementById("tipoEntrega")
+    const datosEntrega = document.getElementById("datosEntrega")
+
+    if (tipoEntrega) {
+      tipoEntrega.addEventListener("change", () => {
+        if (tipoEntrega.value === "domicilio") {
+          datosEntrega.style.display = "block"
+          envioElement.textContent = "1.50€"
+          updateTotals()
+        } else {
+          datosEntrega.style.display = "none"
+          envioElement.textContent = "0.00€"
+          updateTotals()
+        }
+      })
+    }
+  
+    // cambiar de pestaña productos
+
+
+    const productTabs = document.querySelectorAll(".product-tab")
+    const productContents = document.querySelectorAll(".product-content")
+
+    productTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+
+        productTabs.forEach((t) => t.classList.remove("active"))
+        productContents.forEach((c) => c.classList.remove("active"))
+  
+        tab.classList.add("active")
+        const tabId = tab.getAttribute("data-tab")
+        document.getElementById(tabId).classList.add("active")
+      })
+    })
+  
+    // Añadir productos al carrito
+
+    const productCards = document.querySelectorAll(".product-card")
+
+    productCards.forEach((card) => {
+      card.addEventListener("click", () => {
+        const productId = card.getAttribute("data-id")
+        const productName = card.getAttribute("data-name")
+        //const productInfo = card.getAttribute("data-info")
+        const productPrice = Number.parseFloat(card.getAttribute("data-price"))
+  
+        // Comprobar si el producto ya está en el carrito
+        const existingItem = cart.find((item) => item.id === productId)
+  
+        if (existingItem) {
+          existingItem.quantity += 1
+          existingItem.total = existingItem.quantity * existingItem.price
+        } else {
+          cart.push({
+            id: productId,
+            name: productName,
+            //info: productInfo,
+            price: productPrice,
+            quantity: 1,
+            total: productPrice,
+          })
+        }
+  
+        updateCart()
+      })
+    })
+  
+    // Actualizar carrito
+    function updateCart() {
+      if (cart.length === 0) {
+        orderItems.innerHTML = `
+          <div class="empty-cart">
+            <p>No hay productos en el pedido</p>
+            <p>Selecciona productos del catálogo</p>
+          </div>
+        `
+      } else {
+        let cartHTML = ""
+  
+        cart.forEach((item) => {
+          cartHTML += `
+            <div class="order-item" data-id="${item.id}">
+              <div class="order-item-info">
+                <div class="order-item-name">${item.name}</div>
+                <div class="order-item-price">${item.price.toFixed(2)}€</div>
+              </div>
+              <div class="order-item-quantity">
+                <button class="quantity-btn decrease">-</button>
+                <span class="quantity-value">${item.quantity}</span>
+                <button class="quantity-btn increase">+</button>
+              </div>
+              <div class="order-item-total">${item.total.toFixed(2)}€</div>
+              <div class="order-item-remove">×</div>
+              
+              <div style="display: none;">
+              <input type="text" id="${item.id}" name="items[${item.id}][name]" value="${item.name}">
+              <input type="text" id="${item.id}" name="items[${item.id}][precio]" value="${item.price.toFixed(2)}">
+              <input type="text" id="${item.id}" name="items[${item.id}][cantidad]" value="${item.quantity}">
+              </div>
+
+            </div>
+          `
+        })
+  
+        orderItems.innerHTML = cartHTML
+        //orderItems.insertAdjacentHTML('beforeend', innerHTML)
+        // Eventos de los botones de las cantidades
+        document.querySelectorAll(".quantity-btn.decrease").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            
+            const itemElement = btn.closest(".order-item")
+            const itemId = itemElement.getAttribute("data-id")
+            decreaseQuantity(itemId)
+          })
+        })
+  
+        document.querySelectorAll(".quantity-btn.increase").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            //e.stopPropagation()
+            const itemElement = btn.closest(".order-item")
+            const itemId = itemElement.getAttribute("data-id")
+            increaseQuantity(itemId)
+          })
+        })
+  
+        // Eventos al boton de borrar producto
+        document.querySelectorAll(".order-item-remove").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            e.stopPropagation()
+            const itemElement = btn.closest(".order-item")
+            const itemId = itemElement.getAttribute("data-id")
+            removeItem(itemId)
+          })
+        })
+      }
+  
+      updateTotals()
+    }
+  
+    // Aumentar cantidad
+    function increaseQuantity(itemId) {
+      const item = cart.find((item) => item.id === itemId)
+      if (item) {
+        item.quantity += 1
+        item.total = item.quantity * item.price
+        updateCart()
+      }
+    }
+  
+    // Disminuir cantidad
+    function decreaseQuantity(itemId) {
+      const item = cart.find((item) => item.id === itemId)
+      if (item && item.quantity > 1) {
+        item.quantity -= 1
+        item.total = item.quantity * item.price
+        updateCart()
+      } else if (item && item.quantity === 1) {
+        removeItem(itemId)
+      }
+    }
+  
+    // Eliminar producto
+    function removeItem(itemId) {
+      cart = cart.filter((item) => item.id !== itemId)
+      updateCart()
+    }
+  
+    // Actualizar totales
+    function updateTotals() {
+      const subtotal = cart.reduce((total, item) => total + item.total, 0)
+      const shipping = tipoEntrega && tipoEntrega.value === "domicilio" ? shippingCost : 0
+      const total = subtotal + shipping
+  
+      subtotalElement.textContent = subtotal.toFixed(2) + "€"
+      envioElement.textContent = shipping.toFixed(2) + "€"
+      totalElement.textContent = total.toFixed(2) + "€"
+      totalOrder.value = total.toFixed(2)
+      // Actualizar cambio si se introduce un importe
+      if (importeEfectivo && importeEfectivo.value) {
+        updateCambio()
+      }
+    }
+  
+    // Mostrar o ocultar sección de cambio según método de pago
+    paymentMethods.forEach((method) => {
+      method.addEventListener("change", () => {
+        if (method.value === "efectivo") {
+          cambioContainer.style.display = "block"
+        } else {
+          cambioContainer.style.display = "none"
+        }
+      })
+    })
+  
+    // Calcular cambio
+    if (importeEfectivo) {
+      importeEfectivo.addEventListener("input", updateCambio)
+    }
+  
+    function updateCambio() {
+      const importe = Number.parseFloat(importeEfectivo.value) || 0
+      const total = Number.parseFloat(totalElement.textContent)
+  
+      if (importe >= total) {
+        const cambio = importe - total
+        cambioElement.value = cambio.toFixed(2) + "€"
+        cambioElement.classList.remove("input-error")
+      } else {
+        cambioElement.value = "Importe insuficiente"
+        cambioElement.classList.add("input-error")
+      }
+    }
+  
+    // Finalizar pedido
+    
+    
+  
+    // Cerrar modal
+    if (closeConfirmModalBtn) {
+      closeConfirmModalBtn.addEventListener("click", () => {
+        document.getElementById("direccionForm").reset()
+        cart = []
+        updateCart()
+        document.getElementById("direccionForm").reset()
+        confirmModal.classList.remove("active")
+        
+      })
+    }
+
+    // Agarramos el formulario
+    const form = document.getElementById('direccionForm');
+
+    form.addEventListener('submit', function(e) {
+        if (cart.length === 0) {
+            alert("Añade productos al pedido antes de finalizar");
+            e.preventDefault();  // Detiene el envío del formulario
+            return;
+        }
+        
+        // verificar si el importe es suficiente
+        const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value
+        if (paymentMethod === "efectivo") {
+          const importe = Number.parseFloat(importeEfectivo.value) || 0
+          const total = Number.parseFloat(totalElement.textContent)
+  
+          if (importe < total) {
+            alert("El importe en efectivo es insuficiente")
+            e.preventDefault();  // Detiene el envío del formulario
+            return;
+          }
+        }
+    });
+
+  
+  
+    
+    updateCart()
+  })
+  
+    </script>
 </body>
 </html>

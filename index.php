@@ -91,11 +91,28 @@
         <div class="repartidores-grid">
           <?php 
 
-      require('db.php');
+      try {
+        require('db.php');
+    } catch (Throwable $t) {
+        echo "<p> ---------------</p>";
+        echo "<p>Mensaje:" . $t->getMessage()."</p>";
+        echo "<p> ---------------</p>";
+        exit();
+    }
 
       try {
+
         //Realizo la conexion
       $conexion=mysqli_connect($hostname, $username, $password, $dbname);
+
+      if (!$conexion) {
+        die("Error de conexión a MySQL: " . mysqli_connect_error());
+        }
+
+      if (!mysqli_select_db($conexion, $dbname)) {
+        die("No se pudo seleccionar la base de datos: " . mysqli_error($conexion));
+        }
+
         mysqli_query($conexion,"SET NAMES 'UTF8'");
         
         if (mysqli_select_db($conexion,$dbname)) {

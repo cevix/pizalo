@@ -1,7 +1,7 @@
-//Fucntion orders
+//Fuccionalida para cambiar la informacion
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Tab functionality
+
     const tabButtons = document.querySelectorAll(".tab-btn")
     const tabContents = document.querySelectorAll(".tab-content")
   
@@ -21,5 +21,5 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   })
 
-//Funtion modal
+
   

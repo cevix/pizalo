@@ -22,9 +22,9 @@ if (!$conexion) {
     die("Conexión fallida: " . mysqli_connect_error());
 }
 
-$sql = "INSERT INTO repartidores (id,nombre,apellido, email, telefono, dni , password_hash) VALUES ('$idUnico','$nombre','$apellidos','$email','$telefono','$dni' ,'$password_hash')";
+$consulta = "INSERT INTO repartidores (id,nombre,apellido, email, telefono, dni , password_hash) VALUES ('$idUnico','$nombre','$apellidos','$email','$telefono','$dni' ,'$password_hash')";
 
-$resultado=mysqli_query($conexion, $sql);
+$resultado=mysqli_query($conexion, $consulta);
 if ($resultado) {
     echo "Registro insertado correctamente.";
 } else {
